@@ -212,6 +212,3 @@ data/
 
 # Notebook
 wildfire_detection.ipynb
-
-# Tests unitaires
-tests/
