@@ -2654,7 +2654,7 @@ requires-dist = [
     { name = "deprecated", specifier = "==1.2.18" },
     { name = "dill", specifier = "==0.4.0" },
     { name = "dnspython", specifier = "==2.8.0" },
-    { name = "fiftyone", specifier = "==1.8.0" },
+    { name = "fiftyone", extras = ["desktop"], specifier = "==1.8.0" },
     { name = "fiftyone-brain", specifier = "==0.21.3" },
     { name = "fiftyone-db", specifier = "==1.3.0" },
     { name = "filelock", specifier = "==3.19.1" },
