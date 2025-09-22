@@ -36,9 +36,10 @@ def run_pipeline(json_path: Path, json_out_path: Path):
     print(f"Annotations hors limites de l'image : {len(bbox_out_image_df)}")
 
     # Nettoyer le JSON
-    remove_unannotated_images(json_path, json_out_path)
+    remove_unannotated_images(json_path, json_out_path, annotations_df)
 
     # Supprimer les images sans annoations du disque
-    remove_files_without_annotations(images_df, json_path, annotations_df)
+    images_dir = Path("data/images")
+    remove_files_without_annotations(images_dir, annotations_df, images_df)
 
     return images_df, annotations_df, categories_df, merged_df
