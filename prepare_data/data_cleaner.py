@@ -21,7 +21,7 @@ def remove_unannotated_images(json_path: Path, json_out_path: Path, annotations_
     """Supprime les images sans annotations et sauvegarde un nouveau JSON."""
     data = open_json(json_path)
 
-    annotated_ids = set(annotations_df["image_id"].unique())
+    annotated_ids = set(annotations_df["image_id"].astype(int))
     data["images"] = [img for img in data["images"] if img["id"] in annotated_ids]
     data["annotations"] = [
         ann for ann in data["annotations"] if ann["image_id"] in annotated_ids
@@ -34,7 +34,8 @@ def remove_unannotated_images(json_path: Path, json_out_path: Path, annotations_
 def remove_files_without_annotations(
     images_dir: Path, annotations_df: pd.DataFrame, images_df: pd.DataFrame
 ):
-    annotated_ids = set(annotations_df["image_id"].unique())
+
+    annotated_ids = set(annotations_df["image_id"].astype(int))
     images_without_annotations = images_df[~images_df["id"].isin(annotated_ids)]
 
     removed_count = 0
@@ -88,12 +89,15 @@ def check_bbox_vs_image(
         img_h = image_sizes[row["image_id"]]["height"]
         x, y, w, h = row["x"], row["y"], row["width"], row["height"]
 
+        x2, y2 = min(x + w, img_w), min(y + h, img_h)
         if x < 0 or y < 0 or w <= 0 or h <= 0:
             return True
         if (x + w) > img_w + epsilon or (y + h) > img_h + epsilon:
+
             return True
         return False
 
     annotations_df = annotations_df.copy()
     annotations_df["invalid_bbox"] = annotations_df.apply(is_invalid, axis=1)
     return annotations_df[annotations_df["invalid_bbox"]]
+

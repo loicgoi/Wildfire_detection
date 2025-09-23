@@ -43,3 +43,4 @@ def run_pipeline(json_path: Path, json_out_path: Path):
     remove_files_without_annotations(images_dir, annotations_df, images_df)
 
     return images_df, annotations_df, categories_df, merged_df
+
