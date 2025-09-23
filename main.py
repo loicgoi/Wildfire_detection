@@ -1,6 +1,6 @@
 from pathlib import Path
 from pipeline import run_pipeline
-from prepare_data.split_dataset import split_dataset
+from prepare_data.data_preparation import split_dataset
 from visualize import launch_fiftyone_dataset
 
 if __name__ == "__main__":
@@ -8,11 +8,15 @@ if __name__ == "__main__":
     json_out_path = Path(
         "data/satellite_wildfire_detection/_annotations_cleaned.coco.json"
     )
+
+    # Chemin pour visualize.py et FiftyOne
     dataset_dir = "data/satellite_wildfire_detection"
-    coco_json = "data/satellite_wildfire_detection/_annotations_cleaned.coco.json"
+    coco_json = dataset_dir + "/_annotations_cleaned.coco.json"
 
     # On lance le pipeline de traintement
-    run_pipeline(json_path, json_out_path)
+    images_df, annotations_df, categories_df, merged_df = run_pipeline(
+        json_path, json_out_path
+    )
 
     # On lance le split des données pour l'entrainement
     split_dataset()
