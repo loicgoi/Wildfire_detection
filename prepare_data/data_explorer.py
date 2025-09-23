@@ -1,5 +1,5 @@
 import pandas as pd
-from data_loader import load_annotations_to_df
+from prepare_data.data_loader import load_annotations_to_df
 
 # Retourne le nombre total d’images
 def get_total_images(df_images: pd.DataFrame) -> int:
@@ -36,3 +36,4 @@ if __name__ == "__main__":
     print("Catégories:", get_categories(categories_df))
     print("Nombre d’images par catégorie:\n", get_images_per_category(annotations_df, categories_df))
     print("Statistiques annotations par image:", get_annotation_stats(annotations_df))
+
