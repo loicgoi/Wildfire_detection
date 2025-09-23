@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 import pandas as pd
+from .data_loader import load_annotations_to_df
+
 
 def open_json(json_path: Path) -> dict:
     """Lit un fichier JSON et retourne son contenu sous forme de dictionnaire."""
@@ -32,6 +34,7 @@ def remove_unannotated_images(json_path: Path, json_out_path: Path, annotations_
 def remove_files_without_annotations(
     images_dir: Path, annotations_df: pd.DataFrame, images_df: pd.DataFrame
 ):
+
     annotated_ids = set(annotations_df["image_id"].astype(int))
     images_without_annotations = images_df[~images_df["id"].isin(annotated_ids)]
 
@@ -72,8 +75,13 @@ def detect_inconsistent_area(annotations_df: pd.DataFrame) -> pd.DataFrame:
     return annotations_df[annotations_df["area_diff"].abs() > 1e-3]
 
 
-def check_bbox_vs_image(annotations_df: pd.DataFrame, images_df: pd.DataFrame):
-    """Vérifie que les bbox ne sortent pas des limites de l'image."""
+def check_bbox_vs_image(
+    annotations_df: pd.DataFrame, images_df: pd.DataFrame, epsilon: float = 1.0
+):
+    """
+    Vérifie que les bbox ne sortent pas des limites de l'image.
+    Tolère un petit dépassement (epsilon) dû aux arrondis flottants.
+    """
     image_sizes = images_df.set_index("id")[["width", "height"]].to_dict("index")
 
     def is_invalid(row):
@@ -84,10 +92,12 @@ def check_bbox_vs_image(annotations_df: pd.DataFrame, images_df: pd.DataFrame):
         x2, y2 = min(x + w, img_w), min(y + h, img_h)
         if x < 0 or y < 0 or w <= 0 or h <= 0:
             return True
-        if x2 > img_w or y2 > img_h:
+        if (x + w) > img_w + epsilon or (y + h) > img_h + epsilon:
+
             return True
         return False
 
     annotations_df = annotations_df.copy()
     annotations_df["invalid_bbox"] = annotations_df.apply(is_invalid, axis=1)
     return annotations_df[annotations_df["invalid_bbox"]]
+

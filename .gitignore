@@ -212,7 +212,6 @@ data/satellite_wildfire_detection/images/
 data/satellite_wildfire_detection/annotations/
 
 # Notebook
-
 wildfire_detection.ipynb
 
 #model 
@@ -225,3 +224,4 @@ tests/
 #runs/detect
 
 runs/
+

@@ -38,13 +38,9 @@ def run_pipeline(json_path: Path, json_out_path: Path):
     # Nettoyer le JSON
     remove_unannotated_images(json_path, json_out_path, annotations_df)
 
-    # Supprimer les images sans annoations du disque
-    images_dir = Path("data/images")
+    # Supprimer les images sans annotations du disque
+    images_dir = Path("data/satellite_wildfire_detection")
     remove_files_without_annotations(images_dir, annotations_df, images_df)
 
     return images_df, annotations_df, categories_df, merged_df
 
-json_path = Path("data/satellite_wildfire_detection/_annotations.coco.json")
-json_out_path = Path("data/satellite_wildfire_detection/_annotations_cleaned.coco.json")
-
-images_df, annotations_df, categories_df, merged_df = run_pipeline(json_path, json_out_path)
