@@ -74,8 +74,13 @@ def detect_inconsistent_area(annotations_df: pd.DataFrame) -> pd.DataFrame:
     return annotations_df[annotations_df["area_diff"].abs() > 1e-3]
 
 
-def check_bbox_vs_image(annotations_df: pd.DataFrame, images_df: pd.DataFrame):
-    """Vérifie que les bbox ne sortent pas des limites de l'image."""
+def check_bbox_vs_image(
+    annotations_df: pd.DataFrame, images_df: pd.DataFrame, epsilon: float = 1.0
+):
+    """
+    Vérifie que les bbox ne sortent pas des limites de l'image.
+    Tolère un petit dépassement (epsilon) dû aux arrondis flottants.
+    """
     image_sizes = images_df.set_index("id")[["width", "height"]].to_dict("index")
 
     def is_invalid(row):
@@ -83,10 +88,9 @@ def check_bbox_vs_image(annotations_df: pd.DataFrame, images_df: pd.DataFrame):
         img_h = image_sizes[row["image_id"]]["height"]
         x, y, w, h = row["x"], row["y"], row["width"], row["height"]
 
-        x2, y2 = min(x + w, img_w), min(y + h, img_h)
         if x < 0 or y < 0 or w <= 0 or h <= 0:
             return True
-        if x2 > img_w or y2 > img_h:
+        if (x + w) > img_w + epsilon or (y + h) > img_h + epsilon:
             return True
         return False
 
