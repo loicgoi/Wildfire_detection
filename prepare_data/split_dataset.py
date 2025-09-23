@@ -66,10 +66,10 @@ def split_dataset():
         "categories": coco_data["categories"],
     }
 
-    with open(DATA_DIR / "_annotations_train.json", "w") as f:
+    with open(DATA_DIR / "_annotations_train.coco.json", "w") as f:
         json.dump(train_json, f, indent=4)
 
-    with open(DATA_DIR / "_annotations_val.json", "w") as f:
+    with open(DATA_DIR / "_annotations_val.coco.json", "w") as f:
         json.dump(val_json, f, indent=4)
 
     print(
