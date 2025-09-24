@@ -1,18 +1,13 @@
 from ultralytics import YOLO
 
-
-def load_model(weights: str = "yolov8n.pt") -> YOLO:
-    """
-    Charge le modèle YOLOv8 avec les poids pré-entraînés.
-    Args :
-        weights (str) : chemin d'accès au fichier contenant les poids (par défaut yolov8m.pt)
-    Returns :
-        YOLO : objet modèle
-    """
-    model = YOLO(weights)
-    return model
+# Liste de configurations disponibles
+CONFIGS = {
+    "yv8n": {"model": "yolov8n.pt", "batch": 32, "epochs": 100},
+    "yv8s": {"model": "yolov8s.pt", "batch": 32, "epochs": 100},
+    "yv11n": {"model": "yolov11n.pt", "batch": 32, "epochs": 100},
+}
 
 
-if __name__ == "__main__":
-    model = load_model()
-    print(model.info())
+def load_model(model_name):
+    """Charge un modèle YOLO pré-entraîné"""
+    return YOLO(model_name)
