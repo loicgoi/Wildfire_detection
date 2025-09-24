@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 
-def load_model(weights: str = "yolov8m.pt") -> YOLO:
+def load_model(weights: str = "yolov8n.pt") -> YOLO:
     """
     Charge le modèle YOLOv8 avec les poids pré-entraînés.
     Args :
@@ -15,4 +15,4 @@ def load_model(weights: str = "yolov8m.pt") -> YOLO:
 
 if __name__ == "__main__":
     model = load_model()
-    print(model.info()) 
+    print(model.info())

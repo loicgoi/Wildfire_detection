@@ -1,0 +1,15 @@
+# wildfire.yaml
+
+# Chemins relatifs ou absolus
+path: data/satellite_wildfire_detection
+train: train/images
+val: val/images
+test: test/images
+
+# Nombre de classes
+nc: 2
+
+# Noms des classes
+names:
+  0: wildfire
+  1: fire
