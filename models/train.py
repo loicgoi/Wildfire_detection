@@ -1,5 +1,5 @@
 # models/train.py
-from model import CONFIGS, load_model
+from .model import CONFIGS, load_model
 
 
 def train_model(cfg, data_yaml="data.yaml"):
@@ -12,11 +12,6 @@ def train_model(cfg, data_yaml="data.yaml"):
         imgsz=640,
         save=True,
         save_period=10,
+        name=cfg["name"],
     )
     return results
-
-
-if __name__ == "__main__":
-    # Exemple : entraîner le modèle nano
-    cfg = CONFIGS["yv8n"]
-    train_model(cfg)
