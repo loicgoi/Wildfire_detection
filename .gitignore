@@ -215,13 +215,11 @@ data/satellite_wildfire_detection/annotations/
 wildfire_detection.ipynb
 
 #model 
-checkpoints/
+*.pt
 
 #tests
 
-tests/
 
 #runs/detect
-
 runs/
 
