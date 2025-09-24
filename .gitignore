@@ -216,6 +216,7 @@ wildfire_detection.ipynb
 
 #model 
 checkpoints/
+*.pt
 
 #tests
 

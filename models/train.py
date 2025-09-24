@@ -10,6 +10,7 @@ def train_model(cfg, data_yaml="data.yaml"):
         epochs=cfg["epochs"],
         batch=cfg["batch"],
         imgsz=640,
+        save=True,
         save_period=10,
     )
     return results
