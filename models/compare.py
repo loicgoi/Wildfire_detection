@@ -1,5 +1,5 @@
 # models/compare.py
-from models.model import CONFIGS, load_model
+from model import CONFIGS, load_model
 
 
 def compare_models(configs, data_yaml="data.yaml"):
