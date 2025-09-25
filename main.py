@@ -40,13 +40,12 @@ def main(
 
     if compare:
         # Comparaison de plusieurs modèles
-        summary = compare_models(CONFIGS)
+        summary = compare_models(data_yaml="data.yaml")
         print("Résumé des comparaisons :", summary)
 
     if evaluate:
         # Évaluation du meilleur modèle sur le test set
-        model_name = "yv8n"
-        results = evaluate_model(model_name, split="test")
+        results = evaluate_model(split="test")
         print("Résultats sur le test set :", results)
 
 
