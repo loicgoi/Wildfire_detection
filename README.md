@@ -12,64 +12,120 @@ Objectifs :
 
 ## 2. Structure du projet
 
+```
+Wildfire_detection/
+├── data/ # Dossier des images et annotations
+├── models/ # Scripts pour l'entraînement et la comparaison des modèles
+│ ├── init.py
+│ ├── compare.py
+│ ├── evaluate.py
+│ ├── model.py
+│ └── train.py
+├── prepare_data/ # Scripts pour nettoyage, préparation et exploration des données
+│ ├── init.py
+│ ├── data_cleaner.py
+│ ├── data_explorer.py
+│ ├── data_loader.py
+│ └── data_preparation.py
+├── tests/ # Tests unitaires
+│ ├── init.py
+│ ├── test_data_cleaner.py
+│ ├── test_data_explorer.py
+│ └── test_data_loader.py
+├── main.py # Script principal pour lancer entraînement et évaluation
+├── pipeline.py # Pipeline global du projet
+├── pyproject.toml
+├── README.md
+├── requirements.txt
+├── uv.lock
+├── visualize.py # Visualisation du jeu de données dans FiftyOne
+├── .gitignore
+├── .python-version
+└── data.yaml # Fichier de configuration dataset YOLO
+```
+
+
+---
 
 ## 3. Installation
 
+
 ### 1. Cloner le dépôt :
- 
 ```bash
 git clone https://github.com/loicgoi/Wildfire_detection.git
 cd Wildfire_detection
-```
+```  
+
 
 ### 2. Créer un environnement virtuel :
-
 ```bash
 uv venv
-```
+```  
+
 
 ### 3. Installer les dépendances :
-
 ```bash
 uv sync
-```
+```  
 
-## 4. Structure des données :
 
-images/ : 
-- images satellites  
+## 4. Structure des données
 
-- _annotations.coco.json : annotations au format COCO  
+- data/ : images satellites
 
-- Chaque annotation contient : image_id, category_id, bbox (x, y, largeur, hauteur)  
+- _annotations.coco.json : annotations au format COCO
+
+Chaque annotation contient :
+
+- image_id
+
+- category_id
+
+- bbox (x, y, largeur, hauteur)  
+  
 
 ## 5. Usage
 
-Exploration des données
+Possibilité de lancer main.py avec des parser en paramètres :
+
+- --preprocess : Import, traitement et split des données
+- --train : Entrainer le modèle
+- --evaluate : Evaluer le meilleur modèle
+- --compare : Comparer les modèles entre-eux
+- --visualize : Lancer la visualisation FiftyOne
+
+Exemple :
 ```bash
-jupyter notebook notebooks/exploration.ipynb
+python main.py --compare
 ```
+Génère un tableau comparatif (comparison_results.csv) :  
 
-Entraînement du modèle
-```bash
-jupyter notebook notebooks/train_model.ipynb
-```
 
-Évaluation
-- Visualisation des bounding boxes prédites vs. annotations  
+## 6. Comparaison des modèles
 
-- Calcul des métriques : IoU, mAP, precision, recall  
+Exemple de tableau comparatif obtenu :
 
-## 6. Métriques
-- IoU (Intersection over Union) : qualité de localisation  
+| Model   | Precision | Recall | mAP50  | mAP50-95 | Fitness |
+| ------- | --------- | ------ | ------ | -------- | ------- |
+| yv8s    | 0.4861    | 0.3947 | 0.4252 | 0.2179   | 0.2179  |
+| y11s_DA | 0.5171    | 0.4211 | 0.4310 | 0.2230   | 0.2230  |
+| y11n   | 0.6118    | 0.4842 | 0.4940 | 0.2660   | 0.2660  |
+| yv8n    | 0.5146    | 0.4632 | 0.4641 | 0.2597   | 0.2597  |
+| yv8s_DA | 0.5074    | 0.4737 | 0.4464 | 0.2578   | 0.2578  |
 
-- Precision / Recall : qualité de détection  
+Analyse des résultats
 
-- mAP : moyenne de la précision pour toutes les classes  
+- Meilleur modèle global : y11n (Fitness = 0.266)
+
+- Effet de la Data Augmentation : légère amélioration de Recall
+
+- YOLO11n dépasse les modèles YOLOv8 en précision et rappel
+
+- Compromis vitesse/précision : YOLOv8 reste plus léger mais légèrement moins performant  
+
 
 ## 7. Remarques
-- Ne pas versionner les données lourdes dans Git  
 
-- Utiliser le pipeline pour garantir la cohérence du traitement des données  
+- Ne pas versionner les données lourdes dans Git
 
-- Les notebooks sont utilisés pour l’exploration et le test des modèles  
+- Utiliser le pipeline pour garantir la cohérence du traitement des données
