@@ -12,6 +12,7 @@ def train_model(cfg, data_yaml="data.yaml"):
         imgsz=640,
         save=True,
         save_period=10,
+        project="runs/detect",
         name=cfg["name"],
     )
     return results
