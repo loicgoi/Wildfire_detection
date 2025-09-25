@@ -69,6 +69,11 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    if not any(vars(args).values()):
+        args.preprocess = args.train = args.compare = args.evaluate = args.visualize = (
+            True
+        )
+
     main(
         preprocessing=args.preprocess,
         train=args.train,
