@@ -1,6 +1,5 @@
 import pytest
 import pandas as pd
-from prepare_data.data_loader import load_annotations_to_df
 from prepare_data.data_explorer import (
     get_total_images,
     get_total_annotations,
@@ -10,40 +9,61 @@ from prepare_data.data_explorer import (
 )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def dataset():
-    json_path = "data/satellite_wildfire_detection/_annotations.coco.json"
-    images_df, annotations_df, categories_df, _ = load_annotations_to_df(json_path)
+    """Jeu de données factice pour explorer les fonctions."""
+    images_df = pd.DataFrame(
+        {
+            "id": [1, 2],
+            "file_name": ["img1.jpg", "img2.jpg"],
+            "width": [100, 200],
+            "height": [100, 200],
+        }
+    )
+    annotations_df = pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "image_id": [1, 1, 2],
+            "category_id": [1, 2, 1],
+        }
+    )
+    categories_df = pd.DataFrame(
+        {
+            "id": [1, 2],
+            "name": ["cat1", "cat2"],
+        }
+    )
     return images_df, annotations_df, categories_df
 
 
-def test_get_total_images(dataset):
-    images_df, _, _ = dataset
-    total = get_total_images(images_df)
-    assert total > 0
-
-
-def test_get_total_annotations(dataset):
-    _, annotations_df, _ = dataset
-    total = get_total_annotations(annotations_df)
-    assert total > 0
+@pytest.mark.parametrize(
+    "func, expected",
+    [
+        (get_total_images, 2),
+        (get_total_annotations, 3),
+    ],
+)
+def test_counts(func, dataset, expected):
+    images_df, annotations_df, _ = dataset
+    df = images_df if func == get_total_images else annotations_df
+    assert func(df) == expected
 
 
 def test_get_categories(dataset):
     _, _, categories_df = dataset
-    categories = get_categories(categories_df)
-    assert len(categories) > 0
+    assert get_categories(categories_df) == ["cat1", "cat2"]
 
 
 def test_get_images_per_category(dataset):
     _, annotations_df, categories_df = dataset
     result = get_images_per_category(annotations_df, categories_df)
     assert isinstance(result, pd.Series)
-    assert not result.empty
+    assert result["cat1"] == 2  # deux images avec la catégorie cat1
+    assert result["cat2"] == 1
 
 
 def test_get_annotation_stats(dataset):
     _, annotations_df, _ = dataset
     stats = get_annotation_stats(annotations_df)
-    expected_keys = {"min", "max", "mean", "median"}
-    assert expected_keys <= stats.keys()
+    assert set(stats.keys()) == {"min", "max", "mean", "median"}
+    assert stats["min"] >= 1
